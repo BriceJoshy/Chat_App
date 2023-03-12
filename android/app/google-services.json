@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "37711796775",
+    "project_id": "chatzon-d0638",
+    "storage_bucket": "chatzon-d0638.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:37711796775:android:7e3abd472eaa181b844c02",
+        "android_client_info": {
+          "package_name": "com.example.chat_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "37711796775-9tm0jqoe4l3ffi52et13hloijhsoqtqq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbZcoX-ENEXcs3UKGYOF7eoP1VhRVHTCs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "37711796775-9tm0jqoe4l3ffi52et13hloijhsoqtqq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
