@@ -1,13 +1,16 @@
-import 'package:chat_app/screens/home_screen.dart';
-import 'package:flutter/material.dart';
+import 'dart:math';
 
+import 'package:chat_app/screens/home_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'google_auth.dart';
+import 'package:flutter/material.dart';
 
 //global object for accessing device screen size
 late Size mq;
 
 // statefull widget as we are dynamically changing it
 class login_screen extends StatefulWidget {
-  const login_screen({super.key});
+  login_screen({super.key});
 
   @override
   State<login_screen> createState() => _login_screenState();
@@ -24,6 +27,15 @@ class _login_screenState extends State<login_screen> {
         _isAnimate = true;
       });
     }); // after half a second
+  }
+
+  _handleGoogleBtnClick() {
+    signInWithGoogle().then((user) {
+      log('\nUser: ${user.user}' as num);
+      log('\nUserAdditionalInfo: ${user.additionalUserInfo}' as num);
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (_) => const home_screen()));
+    });
   }
 
   @override
@@ -58,11 +70,8 @@ class _login_screenState extends State<login_screen> {
                   shape: const StadiumBorder(),
                   elevation: 2),
               onPressed: () {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (_) =>
-                            const home_screen())); // push replacement cuz i dont want the user to go back to this screen after logging in
+                // push replacement cuz i dont want the user to go back to this screen after logging in
+                _handleGoogleBtnClick();
               },
               icon: Image.asset(
                 'assets/icons/google.png',
@@ -86,3 +95,5 @@ class _login_screenState extends State<login_screen> {
     );
   }
 }
+
+class UserCredential {}
