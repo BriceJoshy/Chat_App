@@ -3,10 +3,16 @@ import 'package:flutter/material.dart';
 
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/services.dart';
 import 'firebase_options.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  // system chrome helps us to implement fullscreen for our app
+  // for fullscreen mode edit the styles.xml in both values
+  //as well as the portrait layout in the app
+  //removes the issue of designing for both layouts 
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);//fullscreen display
   _initializeFirebase();
   runApp(const MyApp());
 }
