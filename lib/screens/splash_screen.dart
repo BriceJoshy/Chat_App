@@ -1,3 +1,4 @@
+import 'package:chat_app/screens/auth/login_screen.dart';
 import 'package:chat_app/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -16,8 +17,10 @@ class _splash_screenState extends State<splash_screen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(
-        const Duration(milliseconds: 500), () {}); // after half a second
+    Future.delayed(const Duration(milliseconds: 3500), () {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (_) => const home_screen()));
+    }); // after one and half a second
   }
 
   @override
@@ -37,19 +40,18 @@ class _splash_screenState extends State<splash_screen> {
             bottom: mq.height * .25, // 15 % from top of screen
             width: mq.width,
             child: const Text(
-              "Think. Feel. Chat 🐼", // windows and . for emoji keyboard
+              "Think. Feel. Chat", // windows and . for emoji keyboard
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold),
             ),
           ),
           Positioned(
-            bottom: mq.height * .15,
-            left: mq.width * .45, // 15 % from top of screen
-            child: const CircularProgressIndicator(
-              color: Colors.red,
-              
-            )
-          ),
+              bottom: mq.height * .1,
+              left: mq.width * .4, // 15 % from top of screen
+              child: Image.asset(
+                "assets/images/loading.gif",
+                height: 50,
+              )),
         ],
       ),
     );
