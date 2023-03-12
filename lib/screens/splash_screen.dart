@@ -46,7 +46,7 @@ class _splash_screenState extends State<splash_screen> {
             bottom: mq.height * .15,
             left: mq.width * .45, // 15 % from top of screen
             child: const CircularProgressIndicator(
-              color: Colors.green,
+              color: Colors.red,
               
             )
           ),
