@@ -5,14 +5,14 @@ import 'package:flutter/material.dart';
 late Size mq;
 
 // statefull widget as we are dynamically changing it
-class login_screen extends StatefulWidget {
-  const login_screen({super.key});
+class splash_screen extends StatefulWidget {
+  const splash_screen({super.key});
 
   @override
-  State<login_screen> createState() => _login_screenState();
+  State<splash_screen> createState() => _splash_screenState();
 }
 
-class _login_screenState extends State<login_screen> {
+class _splash_screenState extends State<splash_screen> {
   bool _isAnimate = false;
 
   @override
@@ -27,7 +27,7 @@ class _login_screenState extends State<login_screen> {
 
   @override
   Widget build(BuildContext context) {
-    //mq = MediaQuery.of(context).size;
+    mq = MediaQuery.of(context).size;
     return Scaffold(
       //appbar
       appBar: AppBar(
