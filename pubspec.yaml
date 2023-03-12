@@ -18,8 +18,12 @@ dependencies:
   cupertino_icons: ^1.0.2
   google_fonts: ^1.1.2
   flutter_launcher_icons: ^0.12.0
-  #for integrating firebase
+  # for integrating firebase
   firebase_core: ^2.7.1 
+  # for handing firebase authendicaton
+  firebase_auth: ^0.6.2+1
+  # for handling google sign in
+  google_sign_in: ^5.4.4
   
 
 dev_dependencies:

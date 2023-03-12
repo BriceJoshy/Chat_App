@@ -27,7 +27,7 @@ class _splash_screenState extends State<splash_screen> {
 
       //navigate to home screen
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (_) => const home_screen()));
+          context, MaterialPageRoute(builder: (_) => const login_screen()));
     }); // after one and half a second
   }
 

@@ -1,6 +1,7 @@
 import 'package:chat_app/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 
+
 //global object for accessing device screen size
 late Size mq;
 
@@ -27,7 +28,7 @@ class _login_screenState extends State<login_screen> {
 
   @override
   Widget build(BuildContext context) {
-    //mq = MediaQuery.of(context).size;
+    mq = MediaQuery.of(context).size;
     return Scaffold(
       //appbar
       appBar: AppBar(
