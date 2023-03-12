@@ -1,6 +1,7 @@
 import 'package:chat_app/screens/auth/login_screen.dart';
 import 'package:chat_app/screens/home_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 //global object for accessing device screen size
 late Size mq;
@@ -17,7 +18,14 @@ class _splash_screenState extends State<splash_screen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(milliseconds: 3500), () {
+    Future.delayed(const Duration(seconds: 3), () {
+      //exit fullscreen
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+      SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+          statusBarColor: Colors
+              .transparent)); //need it to be transparent in both light&dark themes
+
+      //navigate to home screen
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (_) => const home_screen()));
     }); // after one and half a second
