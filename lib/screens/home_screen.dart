@@ -17,15 +17,15 @@ class _home_screenState extends State<home_screen> {
       appBar: AppBar(
         leading: IconButton(
             onPressed: () {},
-            icon: Icon(
+            icon: const Icon(
               CupertinoIcons.home,
             )),
         title: const Text('Chatzon .'),
         actions: [
           //search icon
-          IconButton(onPressed: () {}, icon: Icon(Icons.search_rounded)),
+          IconButton(onPressed: () {}, icon: const Icon(Icons.search_rounded)),
           //more icon
-          IconButton(onPressed: () {}, icon: Icon(Icons.more_vert))
+          IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert))
         ],
       ),
 
@@ -33,7 +33,7 @@ class _home_screenState extends State<home_screen> {
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 10, right: 10),
         child: FloatingActionButton(
-            onPressed: () {}, child: Icon(Icons.add_comment_rounded)),
+            onPressed: () {}, child: const Icon(Icons.add_comment_rounded)),
       ),
     );
   }
