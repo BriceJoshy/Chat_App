@@ -40,21 +40,16 @@ class _splash_screenState extends State<splash_screen> {
           Positioned(
             top: mq.height * .3, // 30 % from top of screen
             width: mq.width *
-                .50, // 50 % of the screen leaves 25 % on each side for space look left mq
-            right: mq.width * .25, // 25% from left
-            child: Image.asset('assets/icons/app_icon.png'),
-          ),
-          Positioned(
-            bottom: mq.height * .25, // 15 % from top of screen
-            width: mq.width,
-            child: const Text(
-              "Think. Feel. Chat", // windows and . for emoji keyboard
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold),
+                .80, // 50 % of the screen leaves 25 % on each side for space look left mq
+            right: mq.width * .10, // 25% from left
+            child: Image.asset(
+              'assets/icons/app_logo.png',
+              color: Colors.black,
+              height: 200,
             ),
           ),
           Positioned(
-              bottom: mq.height * .1,
+              bottom: mq.height * .2,
               left: mq.width * .4, // 15 % from top of screen
               child: Image.asset(
                 "assets/images/loading.gif",

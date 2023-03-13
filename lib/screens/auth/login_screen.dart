@@ -50,13 +50,16 @@ class _login_screenState extends State<login_screen> {
       body: Stack(
         children: [
           AnimatedPositioned(
-            top: mq.height * .15, // 15 % from top of screen
+            top: mq.height * .2, // 15 % from top of screen
             width: mq.width *
-                .50, // 50 % of the screen leaves 25 % on each side for space look left mq
+                .80, // 50 % of the screen leaves 25 % on each side for space look left mq
             right:
-                _isAnimate ? mq.width * .25 : -mq.width * .5, // 25% from left
+                _isAnimate ? mq.width * .1 : -mq.width * .5, // 25% from left
             duration: const Duration(seconds: 1),
-            child: Image.asset('assets/icons/app_icon.png'),
+            child: Image.asset(
+              'assets/icons/app_logo.png',
+              color: Colors.black,
+            ),
           ),
           Positioned(
             bottom: mq.height * .15, // 15 % from top of screen
