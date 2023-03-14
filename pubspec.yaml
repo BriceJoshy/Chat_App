@@ -24,6 +24,8 @@ dependencies:
   firebase_auth: ^4.2.10
   # for handling google sign in
   google_sign_in: ^6.0.2
+  # For accessing cloud firestore database
+  cloud_firestore: ^4.4.4
   
 
 dev_dependencies:
