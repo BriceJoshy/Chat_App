@@ -32,10 +32,15 @@ class _Chat_User_CardState extends State<Chat_User_Card> {
           //   //backgroundImage: NetworkImage(widget.user.image),
 
           // ),
-          leading: CachedNetworkImage(
-            imageUrl: "http://via.placeholder.com/350x150",
-            placeholder: (context, url) => const CircularProgressIndicator(),
-            errorWidget: (context, url, error) => const Icon(Icons.error),
+          leading: ClipRRect(
+            borderRadius: BorderRadius.circular(mq.height * .3),
+            child: CachedNetworkImage(
+              width: mq.height * .055,
+              height: mq.height * .055,
+              imageUrl: widget.user.image,
+              placeholder: (context, url) => const CircularProgressIndicator(),
+              errorWidget: (context, url, error) => const Icon(Icons.error),
+            ),
           ),
 
           //user name
@@ -48,11 +53,18 @@ class _Chat_User_CardState extends State<Chat_User_Card> {
           ),
 
           //last message time
-          trailing: const Text(
-            "12:00 PM",
-            style: TextStyle(color: Colors.black54),
+          trailing: Container(
+            width: 15,
+            height: 15,
+            decoration: const BoxDecoration(
+                color: Color(0xff00BD00),
+                borderRadius: BorderRadius.all(Radius.circular(10))),
           ),
         ),
+        // trailing: const Text(
+        //   "12:00 PM",
+        //   style: TextStyle(color: Colors.black54),
+        // ),
       ),
     );
   }

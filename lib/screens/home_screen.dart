@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:chat_app/models/chat_user.dart';
+import 'package:chat_app/screens/profile_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -36,7 +37,14 @@ class _home_screenState extends State<home_screen> {
           //search icon
           IconButton(onPressed: () {}, icon: const Icon(Icons.search_rounded)),
           //more icon
-          IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert))
+          IconButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => profile_screen(user: list[0])));
+              },
+              icon: const Icon(Icons.more_vert))
         ],
       ),
 
@@ -93,9 +101,12 @@ class _home_screenState extends State<home_screen> {
                     return Chat_User_Card(user: list[index]);
                   },
                 );
-              }
-              else {
-                return const Center(child: Text('No Connection Found',style: TextStyle(fontSize: 20),));
+              } else {
+                return const Center(
+                    child: Text(
+                  'No Connection Found',
+                  style: TextStyle(fontSize: 20),
+                ));
               }
           }
         },
