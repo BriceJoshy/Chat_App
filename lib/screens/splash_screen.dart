@@ -44,8 +44,8 @@ class _splash_screenState extends State<splash_screen> {
           Positioned(
             top: mq.height * .3, // 30 % from top of screen
             width: mq.width *
-                .80, // 50 % of the screen leaves 25 % on each side for space look left mq
-            right: mq.width * .10, // 25% from left
+                .80, // 80 % of the screen leaves 10 % on each side for space look left mq
+            right: mq.width * .10, // 10% from left
             child: Image.asset(
               'assets/icons/app_title.png',
               color: Colors.black,
@@ -54,7 +54,7 @@ class _splash_screenState extends State<splash_screen> {
           ),
           Positioned(
               bottom: mq.height * .2,
-              left: mq.width * .4, // 15 % from top of screen
+              left: mq.width * .4, 
               child: Image.asset(
                 "assets/images/loading.gif",
                 height: 50,

@@ -5,6 +5,7 @@
 // void cuz nothing is returned
 // calling build context for snackbar and a message to show
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class Dialogs {
   static void showSnackbar(BuildContext context, String msg, String msg1) {
@@ -15,13 +16,10 @@ class Dialogs {
           children: [
             Container(
               padding: const EdgeInsets.all(16),
-              height: 120,
-              decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.black,
-                  ),
-                  color: Colors.white,
-                  borderRadius: const BorderRadius.all(
+              height: 90,
+              decoration: const BoxDecoration(
+                  color: Color(0xffc72c41),
+                  borderRadius: BorderRadius.all(
                     Radius.circular(20),
                   )),
               child: Row(
@@ -29,37 +27,59 @@ class Dialogs {
                   const SizedBox(
                     width: 48,
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        msg,
-                        style:
-                            const TextStyle(fontSize: 18, color: Colors.black),
-                      ),
-                      Text(
-                        msg1,
-                        style:
-                            const TextStyle(fontSize: 13, color: Colors.black),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      Center(
-                          child: Image.asset(
-                        'assets/images/error_cat_image.png',
-                        height: 50,
-                        color: Colors.black,
-                      )),
-                    ],
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          msg,
+                          style: const TextStyle(
+                              fontSize: 18, color: Colors.white),
+                        ),
+                        Text(
+                          msg1,
+                          style: const TextStyle(
+                              fontSize: 13, color: Colors.white),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
                   ),
                 ],
+              ),
+            ),
+            // ignore: deprecated_member_use
+            Positioned(
+              bottom: 0,
+              child: ClipRRect(
+                borderRadius:
+                    const BorderRadius.only(bottomLeft: Radius.circular(20)),
+                child: SvgPicture.asset(
+                  "assets/images/bubbles.svg",
+                  height: 48,
+                  width: 40,
+                  // ignore: deprecated_member_use
+                  color: const Color(0xff801336),
+                ),
               ),
             ),
             Positioned(
               top: -20,
               left: 0,
-              child: Image.asset(
-                'assets/images/error_corner.png',
-                height: 60,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  SvgPicture.asset(
+                    'assets/images/fail.svg',
+                    height: 40,
+                  ),
+                  Positioned(
+                      top: 10,
+                      child: SvgPicture.asset(
+                        "assets/images/close.svg",
+                        height: 16,
+                      ))
+                ],
               ),
             )
           ],

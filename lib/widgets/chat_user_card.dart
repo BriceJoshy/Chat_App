@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chat_app/models/chat_user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -25,10 +26,16 @@ class _Chat_User_CardState extends State<Chat_User_Card> {
       elevation: 0.5,
       child: InkWell(
         onTap: () {},
-        child:  ListTile(
+        child: ListTile(
           //user profile picture
-          leading: const CircleAvatar(
-            child: Icon(CupertinoIcons.person),
+          // leading: CircleAvatar(
+          //   //backgroundImage: NetworkImage(widget.user.image),
+
+          // ),
+          leading: CachedNetworkImage(
+            imageUrl: "http://via.placeholder.com/350x150",
+            placeholder: (context, url) => const CircularProgressIndicator(),
+            errorWidget: (context, url, error) => const Icon(Icons.error),
           ),
 
           //user name
@@ -46,7 +53,7 @@ class _Chat_User_CardState extends State<Chat_User_Card> {
             style: TextStyle(color: Colors.black54),
           ),
         ),
-      ),);
-
+      ),
+    );
   }
 }

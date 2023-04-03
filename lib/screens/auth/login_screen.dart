@@ -43,12 +43,12 @@ class _login_screenState extends State<login_screen> {
         log('\nUser: ${user.user}');
         log('\nUserAdditionalInfo: ${user.additionalUserInfo}');
 
-        if (APIs.auth.currentUser != null) {
+        if (await APIs.userExits()) {
           Navigator.pushReplacement(
               context, MaterialPageRoute(builder: (_) => const home_screen()));
         } else {
-          Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (_) => const home_screen()));
+          await APIs.createUser().then((value) => Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (_) => const home_screen())));
         }
       }
     });
@@ -74,7 +74,8 @@ class _login_screenState extends State<login_screen> {
       return await APIs.auth.signInWithCredential(credential);
     } catch (e) {
       log('\n_signInWithGoogle: $e');
-      Dialogs.showSnackbar(context, 'Oh snap!!','Something Went Wrong (Check Internet!)');
+      Dialogs.showSnackbar(
+          context, 'Oh snap!!', 'Something Went Wrong (Check Internet!)');
       return null;
     }
   }
@@ -98,45 +99,54 @@ class _login_screenState extends State<login_screen> {
       ),
 
       //body
-      body: Stack(children: [
-        //app logo
-        AnimatedPositioned(
-            top: mq.height * .15,
-            right: _isAnimate ? mq.width * .1 : -mq.width * .5,
-            width: mq.width * .8,
-            duration: const Duration(seconds: 1),
-            child: Image.asset('assets/icons/app_title.png',color: Colors.black,)),
+      body: Stack(
+        children: [
+          //app logo
+          AnimatedPositioned(
+              top: mq.height * .15,
+              right: _isAnimate ? mq.width * .1 : -mq.width * .5,
+              width: mq.width * .8,
+              duration: const Duration(seconds: 1),
+              child: Image.asset(
+                'assets/icons/app_title.png',
+                color: Colors.black,
+              )),
 
-        //google login button
-        Positioned(
+          //google login button
+          Positioned(
             bottom: mq.height * .25,
             left: mq.width * .05,
             width: mq.width * .9,
             height: mq.height * .06,
             child: ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 223, 255, 187),
-                    shape: const StadiumBorder(),
-                    elevation: 1),
-                onPressed: () {
-                  _handleGoogleBtnClick();
-                },
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 223, 255, 187),
+                  shape: const StadiumBorder(),
+                  elevation: 1),
+              onPressed: () {
+                _handleGoogleBtnClick();
+              },
 
-                //google icon
-                icon: Image.asset('assets/icons/google.png', height: mq.height * .03),
+              //google icon
+              icon: Image.asset('assets/icons/google.png',
+                  height: mq.height * .03),
 
-                //login with google label
-                label: RichText(
-                  text: const TextSpan(
-                      style: TextStyle(color: Colors.black, fontSize: 16),
-                      children: [
-                        TextSpan(text: 'Login with '),
-                        TextSpan(
-                            text: 'Google',
-                            style: TextStyle(fontWeight: FontWeight.w500)),
-                      ]),
-                ))),
-      ]),
+              //login with google label
+              label: RichText(
+                text: const TextSpan(
+                  style: TextStyle(color: Colors.black, fontSize: 16),
+                  children: [
+                    TextSpan(text: 'Login with '),
+                    TextSpan(
+                        text: 'Google',
+                        style: TextStyle(fontWeight: FontWeight.w500)),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
