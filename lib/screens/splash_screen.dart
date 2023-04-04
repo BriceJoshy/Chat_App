@@ -23,8 +23,8 @@ class _splash_screenState extends State<splash_screen> {
       //exit fullscreen
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
       SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-          statusBarColor: Colors
-              .transparent)); //need it to be transparent in both light&dark themes
+          systemNavigationBarColor: Colors
+              .white)); //need it to be transparent in both light&dark themes
       if (FirebaseAuth.instance.currentUser != null) {
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (_) => const home_screen()));
@@ -54,7 +54,7 @@ class _splash_screenState extends State<splash_screen> {
           ),
           Positioned(
               bottom: mq.height * .2,
-              left: mq.width * .4, 
+              left: mq.width * .4,
               child: Image.asset(
                 "assets/images/loading.gif",
                 height: 50,

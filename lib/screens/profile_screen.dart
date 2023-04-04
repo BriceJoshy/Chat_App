@@ -103,7 +103,9 @@ class _profile_screenState extends State<profile_screen> {
                           right: 0,
                           child: MaterialButton(
                             elevation: 1,
-                            onPressed: () {},
+                            onPressed: () {
+                              _ShowBottomSheet();
+                            },
                             color: Colors.white,
                             child: const Icon(
                               Icons.edit,
@@ -201,5 +203,58 @@ class _profile_screenState extends State<profile_screen> {
             ),
           )),
     );
+  }
+
+  // bottom sheet for picking a profile pic from user
+  void _ShowBottomSheet() {
+    showModalBottomSheet(
+        context: context,
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+        builder: (_) {
+          return ListView(
+            shrinkWrap: true,
+            padding:
+                EdgeInsets.only(top: mq.height * .03, bottom: mq.height * .05),
+            children: [
+              const Text(
+                "Pick Profile Picture",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+              ),
+              SizedBox(
+                height: mq.height * .02,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {},
+                    child: Image.asset(
+                      'assets/images/gallery.gif',
+                      height: mq.height * .3,
+                    ),
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        shape: const CircleBorder(),
+                        fixedSize: Size(mq.width * .3, mq.height * 0.15)),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {},
+                    child: Image.asset(
+                      'assets/images/camera.gif',
+                      height: mq.height * .3,
+                    ),
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        shape: const CircleBorder(),
+                        fixedSize: Size(mq.width * .3, mq.height * 0.15)),
+                  )
+                ],
+              )
+            ],
+          );
+        });
   }
 }
