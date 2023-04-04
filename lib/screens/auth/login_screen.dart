@@ -74,7 +74,7 @@ class _login_screenState extends State<login_screen> {
       return await APIs.auth.signInWithCredential(credential);
     } catch (e) {
       log('\n_signInWithGoogle: $e');
-      Dialogs.showSnackbar(
+      Dialogs.showErrorSnackbar(
           context, 'Oh snap!!', 'Something Went Wrong (Check Internet!)');
       return null;
     }

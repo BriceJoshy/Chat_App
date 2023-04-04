@@ -35,16 +35,12 @@ class APIs {
   // has come properly or not ,
   // if info has come properly then store in some global object
   static Future<void> getSelfInfo() async {
-    (await firestore
-        .collection('Users')
-        .doc(auth.currentUser!
-            .uid) // using the uid from the gmail login from firestore as the document id
-        .get()
-        .then(
+    // using the uid from the gmail login from firestore as the document id
+    await firestore.collection('Users').doc(auth.currentUser!.uid).get().then(
       (user) async {
         if (user.exists) {
-          me = ChatUser.fromJson(user
-              .data()!); // if user exits then, but we got the json data so we have to parse it
+          me = ChatUser.fromJson(user.data()!);
+          // if user exits then, but we got the json data so we have to parse it
           log('My Data: ${user.data()}');
         } else {
           // create a new user
@@ -53,7 +49,7 @@ class APIs {
           await createUser().then((value) => getSelfInfo());
         }
       },
-    ));
+    );
   }
 
   // for creating a new user
@@ -92,5 +88,13 @@ class APIs {
             isNotEqualTo:
                 user.uid) // except our id load all other users from firebase
         .snapshots();
+  }
+
+  // for updating user information
+  static Future<void> updateUserInfo() async {
+    await firestore
+        .collection('Users')
+        .doc(user.uid)
+        .update({'name': me.name, 'about': me.about});
   }
 }
