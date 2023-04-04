@@ -22,6 +22,14 @@ class _home_screenState extends State<home_screen> {
   List<ChatUser> list =
       []; // not final as there is chance that the list is initialized many times
 
+  // inside home screen i want to call this function so overridding the init state
+  // because this is the first method when this(user) is called when screen is loaded
+  @override
+  void initState() {
+    super.initState();
+    APIs.getSelfInfo();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,7 +50,7 @@ class _home_screenState extends State<home_screen> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (_) => profile_screen(user: list[0])));
+                        builder: (_) => profile_screen(user: APIs.me)));
               },
               icon: const Icon(Icons.more_vert))
         ],
@@ -68,7 +76,7 @@ class _home_screenState extends State<home_screen> {
         // shows all the possible docs
         // printing the data using log
         // using a in loop to check if any data is coming or not
-        stream: APIs.firestore.collection('Users').snapshots(),
+        stream: APIs.getAllUsers(),
         builder: (context, snapshot) {
           // handling cases 1. user not found/found
           switch (snapshot.connectionState) {
