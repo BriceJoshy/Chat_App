@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chat_app/api/api.dart';
@@ -8,6 +9,7 @@ import 'package:chat_app/screens/splash_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../helper/dialogs.dart';
 
@@ -24,6 +26,7 @@ class profile_screen extends StatefulWidget {
 class _profile_screenState extends State<profile_screen> {
   // specifiying the form state is stored
   final _formKey = GlobalKey<FormState>(); // setting the form key
+  String? _image;
   // List<ChatUser> list = [];
   // not final as there is chance that the list is initialized many times
 
@@ -83,19 +86,34 @@ class _profile_screenState extends State<profile_screen> {
                     // for user profile pic
                     Stack(
                       children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(mq.height * .1),
-                          child: CachedNetworkImage(
-                            width: mq.height * .2,
-                            height: mq.height * .2,
-                            fit: BoxFit.fill,
-                            imageUrl: widget.user.image,
-                            placeholder: (context, url) =>
-                                const CircularProgressIndicator(),
-                            errorWidget: (context, url, error) =>
-                                const Icon(Icons.person),
-                          ),
-                        ),
+                        // ternary operator
+                        _image != null
+                            ? ClipRRect(
+                                borderRadius:
+                                    BorderRadius.circular(mq.height * .1),
+                                child: Image.file(
+                                  File(_image!),
+                                  width: mq.height * .2,
+                                  height: mq.height * .2,
+                                  fit: BoxFit.cover,
+                                ),
+                              )
+                            // profile picture
+                            : ClipRRect(
+                                borderRadius:
+                                    BorderRadius.circular(mq.height * .1),
+                                child: CachedNetworkImage(
+                                  width: mq.height * .2,
+                                  height: mq.height * .2,
+                                  fit: BoxFit.fill,
+                                  imageUrl: widget.user.image,
+                                  placeholder: (context, url) =>
+                                      const CircularProgressIndicator(),
+                                  errorWidget: (context, url, error) =>
+                                      const Icon(Icons.person),
+                                ),
+                              ),
+
                         // would be able to customize to our needs
                         // also a small buttom so it will look good too
                         Positioned(
@@ -230,7 +248,20 @@ class _profile_screenState extends State<profile_screen> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      final ImagePicker picker = ImagePicker();
+                      // Pick an image.
+                      final XFile? image =
+                          await picker.pickImage(source: ImageSource.gallery);
+                      // Capture a photo.
+                      if (image != null) {
+                        log('Image Path: ${image.path} --MimeType: ${image.mimeType}');
+                        setState(() {
+                          _image = image.path;
+                        });
+                      }
+                      Navigator.pop(context);
+                    },
                     child: Image.asset(
                       'assets/images/gallery.gif',
                       height: mq.height * .3,
@@ -241,7 +272,20 @@ class _profile_screenState extends State<profile_screen> {
                         fixedSize: Size(mq.width * .3, mq.height * 0.15)),
                   ),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      final ImagePicker picker = ImagePicker();
+                      // Pick an image.
+                      final XFile? image =
+                          await picker.pickImage(source: ImageSource.gallery);
+                      // Capture a photo.
+                      if (image != null) {
+                        log('Image Path: ${image.path} --MimeType: ${image.mimeType}');
+                        setState(() {
+                          _image = image.path;
+                        });
+                      }
+                      Navigator.pop(context);
+                    },
                     child: Image.asset(
                       'assets/images/camera.gif',
                       height: mq.height * .3,

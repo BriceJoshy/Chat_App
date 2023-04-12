@@ -28,7 +28,10 @@ dependencies:
   cloud_firestore: ^4.4.4
   # For showing network images(email profile pic in avatar image)
   cached_network_image: ^3.2.3
+  # for adding avg files
   flutter_svg: ^2.0.4
+  # for picking images from gallery
+  image_picker: ^0.8.7+1
   
 
 dev_dependencies:
