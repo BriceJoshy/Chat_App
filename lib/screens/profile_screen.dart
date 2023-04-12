@@ -105,7 +105,7 @@ class _profile_screenState extends State<profile_screen> {
                                 child: CachedNetworkImage(
                                   width: mq.height * .2,
                                   height: mq.height * .2,
-                                  fit: BoxFit.fill,
+                                  fit: BoxFit.cover,
                                   imageUrl: widget.user.image,
                                   placeholder: (context, url) =>
                                       const CircularProgressIndicator(),
@@ -251,8 +251,8 @@ class _profile_screenState extends State<profile_screen> {
                     onPressed: () async {
                       final ImagePicker picker = ImagePicker();
                       // Pick an image.
-                      final XFile? image =
-                          await picker.pickImage(source: ImageSource.gallery);
+                      final XFile? image = await picker.pickImage(
+                          source: ImageSource.gallery, imageQuality: 80);
                       // Capture a photo.
                       if (image != null) {
                         log('Image Path: ${image.path} --MimeType: ${image.mimeType}');
@@ -260,6 +260,8 @@ class _profile_screenState extends State<profile_screen> {
                           _image = image.path;
                         });
                       }
+                      APIs.updateProfilePictre(File(_image!));
+                      // for hiding the bottem sheet
                       Navigator.pop(context);
                     },
                     child: Image.asset(
@@ -275,15 +277,17 @@ class _profile_screenState extends State<profile_screen> {
                     onPressed: () async {
                       final ImagePicker picker = ImagePicker();
                       // Pick an image.
-                      final XFile? image =
-                          await picker.pickImage(source: ImageSource.gallery);
+                      final XFile? image = await picker.pickImage(
+                          source: ImageSource.camera, imageQuality: 80);
                       // Capture a photo.
                       if (image != null) {
-                        log('Image Path: ${image.path} --MimeType: ${image.mimeType}');
+                        log('Image Path: ${image.path}');
                         setState(() {
                           _image = image.path;
                         });
                       }
+                      APIs.updateProfilePictre(File(_image!));
+                      // for hiding the bottem sheet
                       Navigator.pop(context);
                     },
                     child: Image.asset(

@@ -32,6 +32,8 @@ dependencies:
   flutter_svg: ^2.0.4
   # for picking images from gallery
   image_picker: ^0.8.7+1
+  # for acessing FIrebase Storage(for uploading files) 
+  firebase_storage: ^11.1.0
   
 
 dev_dependencies:
