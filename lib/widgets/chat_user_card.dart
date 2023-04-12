@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../screens/chat_screen.dart';
 import '../screens/splash_screen.dart';
 
 class Chat_User_Card extends StatefulWidget {
@@ -25,7 +26,16 @@ class _Chat_User_CardState extends State<Chat_User_Card> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       elevation: 0.5,
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => ChatScreen(
+                user: widget.user,
+              ),
+            ),
+          );
+        },
         child: ListTile(
           //user profile picture
           // leading: CircleAvatar(

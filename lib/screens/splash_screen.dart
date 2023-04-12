@@ -23,7 +23,8 @@ class _splash_screenState extends State<splash_screen> {
       //exit fullscreen
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
       SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-          systemNavigationBarColor: Colors
+          systemNavigationBarColor: Colors.white,
+          statusBarColor: Colors
               .white)); //need it to be transparent in both light&dark themes
       if (FirebaseAuth.instance.currentUser != null) {
         Navigator.pushReplacement(
