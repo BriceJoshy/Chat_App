@@ -7,7 +7,7 @@ import '../screens/splash_screen.dart';
 class MessageCard extends StatefulWidget {
   const MessageCard({super.key, required this.message});
 
-  final Messages message;
+  final Message message;
 
   @override
   State<MessageCard> createState() => _MessageCardState();

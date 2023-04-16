@@ -1,5 +1,5 @@
-class Messages {
-  Messages({
+class Message {
+  Message({
     required this.toid,
     required this.msg,
     required this.read,
@@ -14,7 +14,7 @@ class Messages {
   late final String sent;
   late final Type type;
 
-  Messages.fromJson(Map<String, dynamic> json) {
+  Message.fromJson(Map<String, dynamic> json) {
     // this is converted to string cuz dont want to face null errors
     // enum is better than raw string comparison
     // Enum stands for enumerated type, a type of data where only a set of predefined values exist. In Dart,

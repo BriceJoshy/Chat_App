@@ -3,7 +3,6 @@ import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chat_app/models/message.dart';
-import 'package:chat_app/screens/home_screen.dart';
 import 'package:chat_app/widgets/message_card.dart';
 import 'package:flutter/material.dart';
 
@@ -26,12 +25,17 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   // list of messages
   // for showing all messages
-  List<Messages> _list = [];
+  List<Message> _list = [];
+
+  // creating a private variable text editing controller
+  // for handling message text changes
+  final _textController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Colors.blueGrey.shade50,
         appBar: AppBar(
           automaticallyImplyLeading: false,
           // i want to design the appbar the way i want
@@ -43,7 +47,7 @@ class _ChatScreenState extends State<ChatScreen> {
           children: [
             Expanded(
               child: StreamBuilder(
-                stream: APIs.getAllMessages(),
+                stream: APIs.getAllMessages(widget.user),
                 // where are we taking the data from , initializing the firestore api
                 // to have the right access any collection
                 // made a collection in the name of users
@@ -64,39 +68,20 @@ class _ChatScreenState extends State<ChatScreen> {
                     case ConnectionState.waiting:
                     case ConnectionState.none:
                       // shows a circular indicator
-                      return const Center(child: CircularProgressIndicator());
+                      return const Center(child: SizedBox());
                     // if some or all data is loaded then show it
                     case ConnectionState.active: // doing
                     case ConnectionState.done: // done
-
                       final data = snapshot.data?.docs;
-                      log('Data: ${jsonEncode(data![0].data())}');
                       // // using the list made above
                       // // this works like a for loop
                       // // taes one object at a time an picks it and provides it
                       // // convert Chatuser from json to the list
                       // // data can be null thats why the "data?" dont execute this code if data is null and return the empty list []
-                      // _list =
-                      //     data?.map((e) => ChatUser.fromJson(e.data())).toList() ??
-                      //         [];
-
-                      // messages are added again 
-                      // then when it loads again messages are cleared
-                      _list.clear();
-                      _list.add(Messages(
-                          toid: 'xyz',
-                          msg: 'hiii',
-                          read: '',
-                          type: Type.text,
-                          fromid: APIs.user.uid,
-                          sent: '12:32'));
-                      _list.add(Messages(
-                          toid: APIs.user.uid,
-                          msg: 'hello',
-                          read: '',
-                          type: Type.text,
-                          fromid: 'xyz',
-                          sent: '12:34'));
+                      _list = data
+                              ?.map((e) => Message.fromJson(e.data()))
+                              .toList() ??
+                          [];
 
                       if (_list.isNotEmpty) {
                         return ListView.builder(
@@ -110,24 +95,9 @@ class _ChatScreenState extends State<ChatScreen> {
                           },
                         );
                       } else {
-                        return Center(
-                          child: Column(
-                            children: [
-                              SizedBox(
-                                height: mq.height * 0.35,
-                              ),
-                              const Text(
-                                'Say Hello!!',
-                                style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.w500),
-                              ),
-                              Image.asset(
-                                'assets/images/hello.gif',
-                                height: mq.height * 0.2,
-                                width: mq.width * 0.2,
-                              )
-                            ],
-                          ),
+                        return const Center(
+                          child: Text('Say Hii! 👋',
+                              style: TextStyle(fontSize: 20)),
                         );
                       }
                   }
@@ -221,12 +191,14 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                   ),
                   // expanded makes it to use all screen space
-                  const Expanded(
+                  Expanded(
                       child: TextField(
-                    keyboardType: TextInputType
-                        .multiline, // for multiline textfield dynamic change when more stuff is typed
+                    // setting he controller
+                    controller: _textController,
+                    // for multiline textfield dynamic change when more stuff is typed
+                    keyboardType: TextInputType.multiline,
                     maxLines: null, // not telling the max lines
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                         hintText: 'Type Something',
                         hintStyle: TextStyle(color: Colors.blueAccent),
                         border: InputBorder.none),
@@ -257,7 +229,15 @@ class _ChatScreenState extends State<ChatScreen> {
 
           // send message button
           MaterialButton(
-            onPressed: () {},
+            onPressed: () {
+              // dont want to send blank messages
+              if (_textController.text.isNotEmpty) {
+                // passing user and message(_textController.text)
+                APIs.sendMessage(widget.user, _textController.text,Type.text);
+                // clearing while sending
+                _textController.text = '';
+              }
+            },
             padding:
                 const EdgeInsets.only(top: 10, bottom: 10, right: 5, left: 10),
             minWidth: 0,
