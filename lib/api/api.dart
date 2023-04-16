@@ -118,7 +118,7 @@ class APIs {
     final ext = file.path.split('.').last;
     log('Extension: $ext');
     //  storage.ref().child('profile_pictures/${user.uid}.');
-    
+
     // storage file ref with path
     final ref = storage.ref().child('profile_pictures/${user.uid}.');
     // there will be no data so we nedd to push it out i.e simply passing that file and it will work
@@ -141,5 +141,16 @@ class APIs {
     await firestore.collection('Users').doc(user.uid).update({
       'image': me.image, // "image" keyword from json file or check the firebase
     });
+  }
+
+  
+  
+  // *************************Chat Screen Related APIs************************
+
+  // for getting all users from firesotre database
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getAllMessages() {
+    // while loading users from collection adding a filter using where clause
+    // ie load users except our own id
+    return firestore.collection('messages').snapshots();
   }
 }
