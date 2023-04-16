@@ -27,7 +27,7 @@ class Message {
     // if type image then enum returns  true in this case type is imae or text is set
     // 'image' == typeimage.name --> true
     // 'image == type.image --> false
-    // when we are sending the message at that time too i send it as ".name" 
+    // when we are sending the message at that time too i send it as ".name"
     type = json['type'].toString() == Type.image.name ? Type.image : Type.text;
     fromid = json['fromid'].toString();
     sent = json['sent'].toString();
@@ -38,7 +38,7 @@ class Message {
     data['toid'] = toid;
     data['msg'] = msg;
     data['read'] = read;
-    data['type'] = type;
+    data['type'] = type.name;
     data['fromid'] = fromid;
     data['sent'] = sent;
     return data;
@@ -51,6 +51,5 @@ class Message {
 // Enum is simply a special kind of class used to represent a fixed number of constant values.
 // An enum is something that is representing the same data in Dart:
 enum Type { text, image }
-
 
 // More reference """https://www.waldo.com/blog/flutter-enum"""
