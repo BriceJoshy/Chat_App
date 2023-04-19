@@ -2,21 +2,22 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:chat_app/helper/my_date_util.dart';
 import 'package:chat_app/screens/splash_screen.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../api/api.dart';
-
-import '../helper/my_date_util.dart';
-import '../main.dart';
 import '../models/chat_user.dart';
 import '../models/message.dart';
 import '../widgets/message_card.dart';
 
 class ChatScreen extends StatefulWidget {
+  // every chatscreen expects a user so we need to pass a user
   final ChatUser user;
 
   const ChatScreen({super.key, required this.user});
@@ -27,14 +28,28 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   //for storing all messages
+  // list of messages
+  // for showing all messages
   List<Message> _list = [];
 
   //for handling message text changes
+  // creating a private variable text editing controller
+  // for handling message text changes
   final _textController = TextEditingController();
 
   //showEmoji -- for storing value of showing or hiding emoji
   //isUploading -- for checking if image is uploading or not?
+  // making a bool to determine if the emojis should be shown or not
   bool _showEmoji = false, _isUploading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    APIs.getSelfInfo();
+    SystemChannels.lifecycle.setMessageHandler((message) async {
+      log('Message: $message');
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +70,9 @@ class _ChatScreenState extends State<ChatScreen> {
           child: Scaffold(
             //app bar
             appBar: AppBar(
+              // i want to design the appbar the way i want
+              // prevent limitations of appbar i.e flexible
+              // returning the widget custom appbar
               automaticallyImplyLeading: false,
               flexibleSpace: _appBar(),
             ),
@@ -67,9 +85,23 @@ class _ChatScreenState extends State<ChatScreen> {
                 Expanded(
                   child: StreamBuilder(
                     stream: APIs.getAllMessages(widget.user),
+                    // where are we taking the data from , initializing the firestore api
+                    // to have the right access any collection
+                    // made a collection in the name of users
+                    // query in snapshots so as to get data then we get bit by bit data
+                    // in side the stream builder we check a condition if()
+                    // if the snapshot has data that case only print that using log
+                    // and storing this in to a final variable 'data'
+                    // data can be null i.e why the '?' after data
+                    // shows all the possible docs
+                    // printing the data using log
+                    // using a in loop to check if any data is coming or not
+                    // stream: APIs.getAllUsers(),
                     builder: (context, snapshot) {
+                      // handling cases 1. user not found/found
                       switch (snapshot.connectionState) {
-                        //if data is loading
+                        // if data is loading
+                        //either waiting or none
                         case ConnectionState.waiting:
                         case ConnectionState.none:
                           return const SizedBox();
@@ -78,6 +110,12 @@ class _ChatScreenState extends State<ChatScreen> {
                         case ConnectionState.active:
                         case ConnectionState.done:
                           final data = snapshot.data?.docs;
+                          // using the list made above
+                          // this works like a for loop
+                          // taes one object at a time an picks it and provides it
+                          // convert Chatuser from json to the list
+                          // data can be null thats why the "data?"
+                          // dont execute this code if data is null and return the empty list []
                           _list = data
                                   ?.map((e) => Message.fromJson(e.data()))
                                   .toList() ??
@@ -90,6 +128,8 @@ class _ChatScreenState extends State<ChatScreen> {
                                 padding: EdgeInsets.only(top: mq.height * .01),
                                 physics: const BouncingScrollPhysics(),
                                 itemBuilder: (context, index) {
+                                  // returning the chat user card
+                                  // current index of the message list
                                   return MessageCard(message: _list[index]);
                                 });
                           } else {
@@ -139,57 +179,75 @@ class _ChatScreenState extends State<ChatScreen> {
   // app bar widget
   Widget _appBar() {
     return InkWell(
-      onTap: () {},
-      child: Row(
-        children: [
-          // back button
-          IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: const Icon(Icons.arrow_back),
-          ),
-          // users pic
-          ClipRRect(
-            borderRadius: BorderRadius.circular(mq.height * .3),
-            child: CachedNetworkImage(
-              width: mq.height * .045,
-              height: mq.height * .045,
-              imageUrl: widget.user.image,
-              placeholder: (context, url) => const CircularProgressIndicator(),
-              errorWidget: (context, url, error) => const Icon(Icons.error),
-            ),
-          ),
-          const SizedBox(
-            width: 10,
-          ),
-          // user name and last online in a column
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                widget.user.name,
-                style: const TextStyle(
-                    fontSize: 16,
-                    color: Colors.black87,
-                    fontWeight: FontWeight.w500),
-              ),
-              const SizedBox(
-                height: 2,
-              ),
-              const Text(
-                "last Online 'dead'",
-                style: TextStyle(
-                  fontSize: 13.5,
-                  color: Colors.black54,
-                ),
-              )
-            ],
-          )
-        ],
-      ),
-    );
+        onTap: () {},
+        child: StreamBuilder(
+          // the user which is expected to be passed 
+            stream: APIs.getUserInfo(widget.user),
+            builder: (context, snapshot) {
+              final data = snapshot.data?.docs;
+              final list =
+                  data?.map((e) => ChatUser.fromJson(e.data())).toList() ?? [];
+
+              return Row(
+                children: [
+                  //back button
+                  IconButton(
+                      onPressed: () => Navigator.pop(context),
+                      icon:
+                          const Icon(Icons.arrow_back, color: Colors.black54)),
+
+                  //user profile picture
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(mq.height * .03),
+                    child: CachedNetworkImage(
+                      width: mq.height * .05,
+                      height: mq.height * .05,
+                      imageUrl:
+                          list.isNotEmpty ? list[0].image : widget.user.image,
+                      errorWidget: (context, url, error) => const CircleAvatar(
+                          child: Icon(CupertinoIcons.person)),
+                    ),
+                  ),
+
+                  //for adding some space
+                  const SizedBox(width: 10),
+
+                  //user name & last seen time
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      //user name
+                      Text(list.isNotEmpty ? list[0].name : widget.user.name,
+                          style: const TextStyle(
+                              fontSize: 16,
+                              color: Colors.black87,
+                              fontWeight: FontWeight.w500)),
+
+                      //for adding some space
+                      const SizedBox(height: 2),
+
+                      //last seen time of user
+                      Text(
+                        list.isNotEmpty
+                            ? list[0].isOnline
+                                ? 'Online'
+                                : MyDateUtil.getLastActiveTime(
+                                    context: context,
+                                    lastActive: list[0].lastActive)
+                            : MyDateUtil.getLastActiveTime(
+                                context: context,
+                                lastActive: widget.user.lastActive),
+                        style: const TextStyle(
+                          fontSize: 13.5,
+                          color: Colors.black54,
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              );
+            }));
   }
 
   // bottom chat input field
@@ -200,6 +258,7 @@ class _ChatScreenState extends State<ChatScreen> {
       child: Row(
         children: [
           //input field & buttons
+          // expanded makes it to use all screen space
           Expanded(
             child: Card(
               shape: RoundedRectangleBorder(
@@ -217,8 +276,11 @@ class _ChatScreenState extends State<ChatScreen> {
 
                   Expanded(
                       child: TextField(
+                    // setting the controller
                     controller: _textController,
+                    // for multiline textfield dynamic change when more stuff is typed
                     keyboardType: TextInputType.multiline,
+                    // not telling the max lines
                     maxLines: null,
                     onTap: () {
                       if (_showEmoji) setState(() => _showEmoji = !_showEmoji);
@@ -231,13 +293,39 @@ class _ChatScreenState extends State<ChatScreen> {
 
                   //pick image from gallery button
                   IconButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        final ImagePicker picker = ImagePicker();
+                        // Pick multiple images
+                        // return a list
+                        final List<XFile> images =
+                            await picker.pickMultiImage(imageQuality: 70);
+                        // uploading & sending image one by one
+                        for (var i in images) {
+                          log('Image Path: ${i.path}');
+                          setState(() => _isUploading = true);
+                          await APIs.sendChatImage(widget.user, File(i.path));
+                          setState(() => _isUploading = false);
+                        }
+                      },
                       icon: const Icon(Icons.image,
                           color: Colors.blueAccent, size: 26)),
 
                   //take image from camera button
                   IconButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        final ImagePicker picker = ImagePicker();
+                        // Pick an image
+                        final XFile? image = await picker.pickImage(
+                            source: ImageSource.camera, imageQuality: 70);
+                        if (image != null) {
+                          log('Image Path: ${image.path}');
+                          setState(() => _isUploading = true);
+
+                          await APIs.sendChatImage(
+                              widget.user, File(image.path));
+                          setState(() => _isUploading = false);
+                        }
+                      },
                       icon: const Icon(Icons.camera_alt_rounded,
                           color: Colors.blueAccent, size: 26)),
 
@@ -251,6 +339,7 @@ class _ChatScreenState extends State<ChatScreen> {
           //send message button
           MaterialButton(
             onPressed: () {
+              // dont want to send blank messages
               if (_textController.text.isNotEmpty) {
                 if (_list.isEmpty) {
                   //on first message (add user to my_user collection of chat user)
@@ -260,7 +349,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   //simply send message
                   APIs.sendMessage(
                       widget.user, _textController.text, Type.text);
-                }
+                } // clearing while sending
                 _textController.text = '';
               }
             },

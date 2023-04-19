@@ -5,6 +5,7 @@ import 'package:chat_app/models/chat_user.dart';
 import 'package:chat_app/screens/profile_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../api/api.dart';
 import '../widgets/chat_user_card.dart';
@@ -36,6 +37,27 @@ class _home_screenState extends State<home_screen> {
   void initState() {
     super.initState();
     APIs.getSelfInfo();
+    // for setting user staus to active in the firebase
+    APIs.updateActiveStatus(true);
+    // for active or not
+    // setMessageHandler function in lifecycle
+    // for updating the active status of the user in the lifecycle events
+    // remume - give the active or online condition
+    // pause - gives the inactive or offlinr condition
+    SystemChannels.lifecycle.setMessageHandler((message) {
+      log('Message: $message');
+      // checking the message if it contains 'pause' then update the active status
+      // if the user is not logged in then
+      if (APIs.auth.currentUser != null) {
+        if (message.toString().contains('resume')) {
+          APIs.updateActiveStatus(true);
+        }
+        if (message.toString().contains('pause')) {
+          APIs.updateActiveStatus(false);
+        }
+      }
+      return Future.value(message);
+    });
   }
 
   @override

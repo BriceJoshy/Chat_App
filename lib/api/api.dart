@@ -111,10 +111,10 @@ class APIs {
 
   // for updating user information
   static Future<void> updateUserInfo() async {
-    await firestore
-        .collection('Users')
-        .doc(user.uid)
-        .update({'name': me.name, 'about': me.about});
+    await firestore.collection('Users').doc(user.uid).update({
+      'name': me.name,
+      'about': me.about,
+    });
   }
 
   // function for update profile picture of user
@@ -154,6 +154,28 @@ class APIs {
     me.image = await ref.getDownloadURL();
     await firestore.collection('Users').doc(user.uid).update({
       'image': me.image, // "image" keyword from json file or check the firebase
+    });
+  }
+
+  // update online or last active status
+  // future void i.e why no "return"
+  // for getting specific user info
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getUserInfo(
+      ChatUser chatUser) {
+    return firestore
+        .collection('Users')
+        .where('id', isEqualTo: chatUser.id)
+        .snapshots();
+  }
+
+// update online or last active stats of user
+  // this is the uid of our current user
+  // updates the isonline and lastactive stuff in firebase
+  
+  static Future<void> updateActiveStatus(bool isOnline) async {
+    firestore.collection('Users').doc(user.uid).update({
+      'is_online': isOnline,
+      'last_active': DateTime.now().millisecondsSinceEpoch.toString()
     });
   }
 
@@ -212,5 +234,28 @@ class APIs {
         .orderBy('sent', descending: true)
         .limit(1)
         .snapshots();
+  }
+
+  // send chat image
+  static Future<void> sendChatImage(ChatUser chatUser, File file) async {
+    final ext = file.path.split('.').last;
+
+    // storage file ref with path
+    final ref = storage.ref().child(
+        'images/${getConversationID(chatUser.id)}/${DateTime.now().millisecondsSinceEpoch}.$ext');
+
+    // uploading image
+    await ref
+        .putFile(file, SettableMetadata(contentType: 'image/$ext'))
+        .then((p0) {
+      // printing the bytes and /1000 for kb calculation
+      log('Data Transferred: ${p0.bytesTransferred / 1000} kb');
+    });
+
+    // "image" keyword from json file or check the firebase
+    // updating the image in firestore database
+    // storing image url sent as a message
+    final imageUrl = await ref.getDownloadURL();
+    await sendMessage(chatUser, imageUrl, Type.image);
   }
 }
