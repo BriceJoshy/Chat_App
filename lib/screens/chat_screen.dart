@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chat_app/helper/my_date_util.dart';
 import 'package:chat_app/screens/splash_screen.dart';
+import 'package:chat_app/screens/view_profile_screen.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -180,10 +181,13 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget _appBar() {
     return InkWell(
         onTap: () {
-          
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (_) => ViewProfileScreen(user: widget.user)));
         },
         child: StreamBuilder(
-          // the user which is expected to be passed 
+            // the user which is expected to be passed
             stream: APIs.getUserInfo(widget.user),
             builder: (context, snapshot) {
               final data = snapshot.data?.docs;
