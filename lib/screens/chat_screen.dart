@@ -179,7 +179,9 @@ class _ChatScreenState extends State<ChatScreen> {
   // app bar widget
   Widget _appBar() {
     return InkWell(
-        onTap: () {},
+        onTap: () {
+          
+        },
         child: StreamBuilder(
           // the user which is expected to be passed 
             stream: APIs.getUserInfo(widget.user),
