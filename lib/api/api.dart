@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
@@ -6,7 +5,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:http/http.dart';
 
 import '../models/chat_user.dart';
 import '../models/message.dart';
@@ -30,9 +28,25 @@ class APIs {
   static User get user => auth.currentUser!;
 
   // for accessing firebase messaging (push notifications)
-  FirebaseMessaging fmessaging = FirebaseMessaging.instance;
+  static FirebaseMessaging fmessaging = FirebaseMessaging.instance;
+
+  // for getting firebase messaging (push notifications)
+  static Future<void> getFirebaseMessagingToken() async {
+    await fmessaging.requestPermission();
+
+    // push token stuff
+    await fmessaging.getToken().then((t) {
+      if (t != null) {
+        // check the chat_user model code for "push_token"
+        me.pushToken = t;
+        log('Push Token: $t');
+      }
+    });
+  }
 
   // for checking if user exists or not?
+  // if we get the permission then we can try to get the push token
+  //
   static Future<bool> userExists() async {
     return (await firestore.collection('Users').doc(user.uid).get()).exists;
   }
@@ -55,6 +69,10 @@ class APIs {
       (user) async {
         if (user.exists) {
           me = ChatUser.fromJson(user.data()!);
+          // when we get the details the user we call the function for getting the firebase push token
+          await getFirebaseMessagingToken();
+          // for setting user to active
+          APIs.updateActiveStatus(true);
           // if user exits then, but we got the json data so we have to parse it
           log('My Data: ${user.data()}');
         } else {
@@ -177,11 +195,12 @@ class APIs {
 // update online or last active stats of user
   // this is the uid of our current user
   // updates the isonline and lastactive stuff in firebase
-
+  // updates the push token too
   static Future<void> updateActiveStatus(bool isOnline) async {
     firestore.collection('Users').doc(user.uid).update({
       'is_online': isOnline,
-      'last_active': DateTime.now().millisecondsSinceEpoch.toString()
+      'last_active': DateTime.now().millisecondsSinceEpoch.toString(),
+      'push_token': me.pushToken,
     });
   }
 

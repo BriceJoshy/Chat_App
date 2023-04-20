@@ -38,7 +38,7 @@ class _home_screenState extends State<home_screen> {
     super.initState();
     APIs.getSelfInfo();
     // for setting user staus to active in the firebase
-    APIs.updateActiveStatus(true);
+    // APIs.updateActiveStatus(true);
     // for active or not
     // setMessageHandler function in lifecycle
     // for updating the active status of the user in the lifecycle events
