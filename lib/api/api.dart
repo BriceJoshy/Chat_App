@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:http/http.dart';
 
@@ -11,6 +12,8 @@ import '../models/chat_user.dart';
 import '../models/message.dart';
 
 class APIs {
+  // the following are the objects made
+
   // for authentication
   static FirebaseAuth auth = FirebaseAuth.instance;
 
@@ -25,6 +28,9 @@ class APIs {
 
   // to return current user
   static User get user => auth.currentUser!;
+
+  // for accessing firebase messaging (push notifications)
+  FirebaseMessaging fmessaging = FirebaseMessaging.instance;
 
   // for checking if user exists or not?
   static Future<bool> userExists() async {
@@ -171,7 +177,7 @@ class APIs {
 // update online or last active stats of user
   // this is the uid of our current user
   // updates the isonline and lastactive stuff in firebase
-  
+
   static Future<void> updateActiveStatus(bool isOnline) async {
     firestore.collection('Users').doc(user.uid).update({
       'is_online': isOnline,
