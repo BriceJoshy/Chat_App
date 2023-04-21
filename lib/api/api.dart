@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:chat_app/secrets/secrets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -44,6 +45,14 @@ class APIs {
         log('Push Token: $t');
       }
     });
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      log('Got a message whilst in the foreground!');
+      log('Message data: ${message.data}');
+
+      if (message.notification != null) {
+        log('Message also contained a notification: ${message.notification}');
+      }
+    });
   }
 
   // for sending push notifications
@@ -61,18 +70,25 @@ class APIs {
     try {
       final body = {
         "to": chatUser.pushToken,
-        "notification": {"title": chatUser.name, "body": msg}
+        "notification": {
+          "title": chatUser.name,
+          "body": msg,
+          "android_channel_id": "chats",
+          // user id is send
+          "data": {
+            "some_data": "UserIDL ${me.id}",
+          },
+        }
       };
       var response =
           await post(Uri.parse('https://fcm.googleapis.com/fcm/send'),
               headers: {
                 HttpHeaders.contentTypeHeader: 'application/json',
-                HttpHeaders.authorizationHeader:
-                    "key=AAAACMfMWic:APA91bE_CrGzBIRGl58M0MKYseZxkfsdkGZAvAmP-mGSXzyf_LzsWMhLMXxiVgTegWWYKOenJwrdp9tQonT4VJtL8QAaoI-eFCEF1b52_sQp-gN3cRhh0z34n40jbNykXRGw-1fdJC67"
+                HttpHeaders.authorizationHeader: "key= $ServerKey"
               },
               body: jsonEncode(body));
-      print('Response status: ${response.statusCode}');
-      print('Response body: ${response.body}');
+      log('Response status: ${response.statusCode}');
+      log('Response body: ${response.body}');
     } catch (e) {
       log('\nsendPushNotificationE: $e');
     }

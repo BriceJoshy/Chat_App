@@ -42,6 +42,8 @@ dependencies:
   # simply helps our app to communicate oe share data with server through URl methods like GET/POST etc
   # for calling REST API
   http: ^0.13.5
+  # for creating notification channel
+  flutter_notification_channel: ^2.0.0
   
 
 dev_dependencies:
