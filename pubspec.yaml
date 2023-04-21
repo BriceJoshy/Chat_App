@@ -18,32 +18,47 @@ dependencies:
   cupertino_icons: ^1.0.2
   google_fonts: ^4.0.3
   flutter_launcher_icons: ^0.13.0
-  # for integrating firebase
+
+  # For integrating firebase
   firebase_core: ^2.7.1 
-  # for handing firebase authendicaton
+  
+  # For handing firebase authendicaton
   firebase_auth: ^4.2.10
-  # for handling google sign in
+  
+  # For handling google sign in
   google_sign_in: ^6.0.2
+  
   # For accessing cloud firestore database
   cloud_firestore: ^4.4.4
+  
   # For showing network images(email profile pic in avatar image)
   cached_network_image: ^3.2.3
-  # for adding avg files
+  
+  # For adding avg files
   flutter_svg: ^2.0.4
-  # for picking images from gallery
+  
+  # For picking images from gallery
   image_picker: ^0.8.7+1
-  # for acessing FIrebase Storage(for uploading files) 
+  
+  # For acessing FIrebase Storage(for uploading files) 
   firebase_storage: ^11.1.0
-  # for showing Emojis😊
+  
+  # For showing Emojis😊
   emoji_picker_flutter: ^1.5.4
+  
   # for accessing firebase messaging (push notifications)
   firebase_messaging: ^14.4.1
+  
   # (REST) API (Application Programming Interface)
   # simply helps our app to communicate oe share data with server through URl methods like GET/POST etc
-  # for calling REST API
+  # For calling REST API
   http: ^0.13.5
-  # for creating notification channel
+  
+  # For creating notification channel
   flutter_notification_channel: ^2.0.0
+  
+  # For saving images into gallery
+  gallery_saver: ^2.3.2
   
 
 dev_dependencies:
