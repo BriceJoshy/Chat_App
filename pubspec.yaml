@@ -38,6 +38,10 @@ dependencies:
   emoji_picker_flutter: ^1.5.4
   # for accessing firebase messaging (push notifications)
   firebase_messaging: ^14.4.1
+  # (REST) API (Application Programming Interface)
+  # simply helps our app to communicate oe share data with server through URl methods like GET/POST etc
+  # for calling REST API
+  http: ^0.13.5
   
 
 dev_dependencies:

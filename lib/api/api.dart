@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
@@ -5,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:http/http.dart';
 
 import '../models/chat_user.dart';
 import '../models/message.dart';
@@ -42,6 +44,38 @@ class APIs {
         log('Push Token: $t');
       }
     });
+  }
+
+  // for sending push notifications
+  // expects a Chat User and also expect a message to be send
+  static Future<void> sendPushNotification(
+      ChatUser chatUser, String msg) async {
+    // when im sending the body in response , it is a json object i.e can't be passed directly
+    // so json encode and send the body
+    // we have to also specify the header
+    // mentioning the content type
+
+    // Mentioning that im sending the json data
+    // Have to pass the api key
+    // chance of error so im putting in try catch
+    try {
+      final body = {
+        "to": chatUser.pushToken,
+        "notification": {"title": chatUser.name, "body": msg}
+      };
+      var response =
+          await post(Uri.parse('https://fcm.googleapis.com/fcm/send'),
+              headers: {
+                HttpHeaders.contentTypeHeader: 'application/json',
+                HttpHeaders.authorizationHeader:
+                    "key=AAAACMfMWic:APA91bE_CrGzBIRGl58M0MKYseZxkfsdkGZAvAmP-mGSXzyf_LzsWMhLMXxiVgTegWWYKOenJwrdp9tQonT4VJtL8QAaoI-eFCEF1b52_sQp-gN3cRhh0z34n40jbNykXRGw-1fdJC67"
+              },
+              body: jsonEncode(body));
+      print('Response status: ${response.statusCode}');
+      print('Response body: ${response.body}');
+    } catch (e) {
+      log('\nsendPushNotificationE: $e');
+    }
   }
 
   // for checking if user exists or not?
@@ -237,10 +271,11 @@ class APIs {
         type: type,
         fromid: user.uid,
         sent: time);
-
+// after then data is set in the firebase then we user "then()" for push notification
     final ref = firestore
         .collection('chats/${getConversationID(chatUser.id)}/messages/');
-    await ref.doc(time).set(message.toJson());
+    await ref.doc(time).set(message.toJson()).then((value) =>
+        sendPushNotification(chatUser, type == Type.text ? msg : 'image'));
   }
 
   //update read status of message
