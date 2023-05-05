@@ -94,13 +94,6 @@ class APIs {
     }
   }
 
-  // for checking if user exists or not?
-  // if we get the permission then we can try to get the push token
-  //
-  static Future<bool> userExists() async {
-    return (await firestore.collection('Users').doc(user.uid).get()).exists;
-  }
-
   // for checking if user exits or not?
   // do the write operation only if the user is new or else dont overwrite the existing data
   static Future<bool> userExits() async {

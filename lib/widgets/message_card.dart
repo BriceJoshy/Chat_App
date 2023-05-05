@@ -5,6 +5,7 @@ import 'package:chat_app/api/api.dart';
 import 'package:chat_app/models/message.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:gallery_saver/gallery_saver.dart';
 
 import '../helper/dialogs.dart';
 import '../helper/my_date_util.dart';
@@ -208,19 +209,35 @@ class _MessageCardState extends State<MessageCard> {
                         // await as it will take some time
                         await Clipboard.setData(
                                 ClipboardData(text: widget.message.msg))
-                            .then((value) => Navigator.pop(context));
+                            .then((value) => // for hiding bottom sheet
+                                Navigator.pop(context));
 
                         Dialogs.showSuccesSnackbar(
                             context, 'Copied!', 'Text copied to clipbord');
                       })
                   : _OptionItem(
-                      icon: const Icon(
-                        Icons.save_alt_rounded,
-                        color: Colors.blue,
-                        size: 26,
-                      ),
+                      icon: const Icon(Icons.download_rounded,
+                          color: Colors.blue, size: 26),
                       name: 'Save Image',
-                      onTap: () {}),
+                      onTap: () async {
+                        try {
+                          log('Image Url: ${widget.message.msg}');
+                          await GallerySaver.saveImage(widget.message.msg,
+                                  albumName: 'We Chat')
+                              .then((success) {
+                            //for hiding bottom sheet
+                            Navigator.pop(context);
+                            if (success != null && success) {
+                              Dialogs.showSuccesSnackbar(
+                                  context,
+                                  'Image Successfully Saved!',
+                                  'Saved to gallery');
+                            }
+                          });
+                        } catch (e) {
+                          log('ErrorWhileSavingImg: $e');
+                        }
+                      }),
 
               if (isMe)
                 Divider(
