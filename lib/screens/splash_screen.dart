@@ -1,5 +1,6 @@
 import 'package:chat_app/screens/auth/login_screen.dart';
 import 'package:chat_app/screens/home_screen.dart';
+import 'package:chat_app/screens/welcome/get_started.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -31,7 +32,7 @@ class _splash_screenState extends State<splash_screen> {
             context, MaterialPageRoute(builder: (_) => const home_screen()));
       } else {
         Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (_) => const login_screen()));
+            context, MaterialPageRoute(builder: (_) => const get_started()));
       }
     }); // after one and half a second
   }

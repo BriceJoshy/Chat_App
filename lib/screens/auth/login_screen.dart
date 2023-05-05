@@ -93,59 +93,79 @@ class _login_screenState extends State<login_screen> {
 
     return Scaffold(
       //app bar
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: const Text('Welcome to We Chat'),
-      ),
+      // appBar: AppBar(
+      //   automaticallyImplyLeading: false,
+      //   title: const Text('Welcome to ChatZon. '),
+      //   elevation: 0,
+      // ),
 
       //body
-      body: Stack(
-        children: [
-          //app logo
-          AnimatedPositioned(
-              top: mq.height * .15,
+      body: Container(
+        decoration: const BoxDecoration(
+          
+          image: DecorationImage(
+              image: AssetImage("assets/images/login_bg.jpeg"),
+              fit: BoxFit.cover),
+        ),
+        child: Stack(
+          children: [
+            //app logo
+            AnimatedPositioned(
+              top: mq.height * .25,
               right: _isAnimate ? mq.width * .1 : -mq.width * .5,
               width: mq.width * .8,
               duration: const Duration(seconds: 1),
               child: Image.asset(
                 'assets/icons/app_title.png',
                 color: Colors.black,
-              )),
+              ),
+            ),
 
-          //google login button
-          Positioned(
-            bottom: mq.height * .25,
-            left: mq.width * .05,
-            width: mq.width * .9,
-            height: mq.height * .06,
-            child: ElevatedButton.icon(
-              style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 223, 255, 187),
-                  shape: const StadiumBorder(),
-                  elevation: 1),
-              onPressed: () {
-                _handleGoogleBtnClick();
-              },
+            //google login button
+            Positioned(
+              bottom: mq.height * .25,
+              left: mq.width * .15,
+              width: mq.width * .7,
+              height: mq.height * .06,
+              child: ElevatedButton.icon(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    elevation: 1),
+                onPressed: () {
+                  _handleGoogleBtnClick();
+                },
 
-              //google icon
-              icon: Image.asset('assets/icons/google.png',
-                  height: mq.height * .03),
+                //google icon
+                icon: Image.asset('assets/icons/google.png',
+                    height: mq.height * .03),
 
-              //login with google label
-              label: RichText(
-                text: const TextSpan(
-                  style: TextStyle(color: Colors.black, fontSize: 16),
-                  children: [
-                    TextSpan(text: 'Login with '),
-                    TextSpan(
-                        text: 'Google',
-                        style: TextStyle(fontWeight: FontWeight.w500)),
-                  ],
+                //login with google label
+                label: RichText(
+                  text: const TextSpan(
+                    style: TextStyle(color: Colors.white, fontSize: 16),
+                    children: [
+                      TextSpan(text: 'Login with '),
+                      TextSpan(
+                          text: 'Google',
+                          style: TextStyle(fontWeight: FontWeight.w500)),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+            Positioned(
+              top: mq.height * .455,
+              left: mq.width * 0.0001,
+              width: mq.width * 1.2,
+              child: Image.asset(
+                'assets/images/cat_loading.gif',
+                color: Colors.black,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
