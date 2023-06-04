@@ -102,7 +102,6 @@ class _login_screenState extends State<login_screen> {
       //body
       body: Container(
         decoration: const BoxDecoration(
-          
           image: DecorationImage(
               image: AssetImage("assets/images/login_bg.jpeg"),
               fit: BoxFit.cover),
@@ -156,11 +155,11 @@ class _login_screenState extends State<login_screen> {
               ),
             ),
             Positioned(
-              top: mq.height * .455,
-              left: mq.width * 0.0001,
-              width: mq.width * 1.2,
+              bottom: mq.height * 0.24,
+              left:  mq.width * 0.5,
               child: Image.asset(
                 'assets/images/cat_loading.gif',
+                height: mq.height * 0.12,
                 color: Colors.black,
               ),
             ),
